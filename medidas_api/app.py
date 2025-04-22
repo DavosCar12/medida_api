@@ -3,6 +3,7 @@ from flask_cors import CORS
 import cv2
 import numpy as np
 import mediapipe as mp
+from fastapi import FastAPI
 from calcular_medidas import calcular_todas_las_medidas  # Este archivo lo debes tener tú
 
 app = Flask(__name__)
@@ -22,4 +23,9 @@ def medir():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000)
+    app = FastAPI()
+
+@app.get("/")
+def inicio():
+    return {"mensaje": "API de medición corporal funcionando"}
 
