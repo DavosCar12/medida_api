@@ -31,7 +31,8 @@ async def medir(imagen: UploadFile = File(...), ancho_cm_tarjeta: float = 8.5):
             f.write(contenido)
 
         # Llamar la función de medición
-        resultado = calcular_todas_las_medidas(nombre_archivo)
+        resultado = calcular_todas_las_medidas(nombre_archivo, ancho_cm_tarjeta)
+
         return resultado
 
     except Exception as e:
