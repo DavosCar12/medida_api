@@ -27,7 +27,7 @@ def calcular_todas_las_medidas(imagen_path, ancho_cm_tarjeta=8.5):
     # CÁLCULO DE REFERENCIA CON TARJETA
     # ---------------------------
     tarjeta_gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
-    _, tarjeta_bin = cv2.threshold(tarjeta_gris, 245, 255, cv2.THRESH_BINARY)
+    _, tarjeta_bin = cv2.threshold(tarjeta_gris, 200, 255, cv2.THRESH_BINARY)
     contornos, _ = cv2.findContours(tarjeta_bin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     tarjeta_mayor = max(contornos, key=cv2.contourArea) if contornos else None
 
