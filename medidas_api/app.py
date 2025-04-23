@@ -16,14 +16,21 @@ app.add_middleware(
 )
 
 @app.post("/medir")
-async def medir(imagen: UploadFile = File(...)):
+async def medir(imagen: UploadFile = File(...), ancho_cm_tarjeta: float = 8.5):
     try:
-        contents = await imagen.read()
-        image_np = np.frombuffer(contents, np.uint8)
-        image = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+        # Guardamos el archivo subido
+        contenido = await imagen.read()
+        nombre_archivo = f"imagenes/{imagen.filename}"
+        with open(nombre_archivo, "wb") as f:
+            f.write(contenido)
 
-        if image is None:
-            return {"error": "No se pudo decodificar la imagen"}, 400
+        # Llamamos a la función para calcular medidas
+        resultado = calcular_todas_las_medidas(nombre_archivo, ancho_cm_tarjeta=ancho_cm_tarjeta)
+        return resultado
+
+    except Exception as e:
+        return {"error": str(e)}
+
 
         medidas = calcular_todas_las_medidas(image, ancho_cm_tarjeta=8.5)
         return medidas
