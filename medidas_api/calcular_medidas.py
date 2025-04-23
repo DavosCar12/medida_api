@@ -3,7 +3,7 @@
 import cv2
 import mediapipe as mp
 
-def calcular_todas_las_medidas(imagen_path):
+def calcular_todas_las_medidas(imagen_path, ancho_cm_tarjeta=None):
     mp_pose = mp.solutions.pose
     with mp_pose.Pose(static_image_mode=True) as pose:
         imagen = cv2.imread(imagen_path)
@@ -15,16 +15,18 @@ def calcular_todas_las_medidas(imagen_path):
 
         landmarks = resultados.pose_landmarks.landmark
 
-        # Ejemplo de cómo medir la distancia entre los hombros (landmarks 11 y 12)
         hombro_izq = landmarks[11]
         hombro_der = landmarks[12]
 
-        # Calculamos la distancia euclidiana en píxeles
         dist_hombros = ((hombro_der.x - hombro_izq.x) ** 2 + (hombro_der.y - hombro_izq.y) ** 2) ** 0.5
 
-        # Opcional: conversión a cm usando una referencia si la tienes
-        # Suponiendo que tienes un factor de conversión "pixeles_por_cm"
-        pixeles_por_cm = 30  # Esto es solo un ejemplo, se debe calcular con referencia visual
+        # Determinar el factor de conversión
+        if ancho_cm_tarjeta:
+            ancho_pixeles_tarjeta = imagen.shape[1]  # Suponiendo que la tarjeta ocupa todo el ancho
+            pixeles_por_cm = ancho_pixeles_tarjeta / ancho_cm_tarjeta
+        else:
+            pixeles_por_cm = 30  # valor por defecto
+
         hombros_cm = dist_hombros * imagen.shape[1] / pixeles_por_cm
 
         return {
