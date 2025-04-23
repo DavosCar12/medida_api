@@ -19,7 +19,7 @@ app.add_middleware(
 
 
 @app.post("/medir")
-async def medir(imagen: UploadFile = File(...), ancho_cm_tarjeta: float = 8.5):
+async def medir(imagen: UploadFile = File(...), ancho_cm_tarjeta: float = 190.0):
     try:
         # ✅ Crear carpeta si no existe
         os.makedirs("imagenes", exist_ok=True)
