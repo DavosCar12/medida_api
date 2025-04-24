@@ -8,7 +8,7 @@ app = FastAPI()
 # Habilita CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Puedes ajustar esto por seguridad
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,14 +24,14 @@ async def medir(
         # Crear carpeta si no existe
         os.makedirs("imagenes", exist_ok=True)
 
-        # Guardar imagen
+        # Guardar la imagen
         contenido = await imagen.read()
-        ruta_archivo = f"imagenes/{imagen.filename}"
-        with open(ruta_archivo, "wb") as f:
+        nombre_archivo = f"imagenes/{imagen.filename}"
+        with open(nombre_archivo, "wb") as f:
             f.write(contenido)
 
-        # Calcular medidas
-        resultado = calcular_todas_las_medidas(ruta_archivo, altura_cm=altura_cm, peso_kg=peso_kg)
+        # Llamar la función de medición
+        resultado = calcular_todas_las_medidas(nombre_archivo, altura_cm=altura_cm, peso_kg=peso_kg)
         return resultado
 
     except Exception as e:
@@ -39,5 +39,5 @@ async def medir(
 
 @app.get("/")
 def inicio():
-    return {"mensaje": "✅ API de medición corporal funcionando"}
+    return {"mensaje": "API de medición corporal funcionando"}
 
